@@ -44,6 +44,7 @@ html {
   width: 100%;
   max-width: 480px;
   border-bottom: 1px solid #ebebeb;
+  border-radius: 0px 0px 10px 10px;
 }
 
 /* HEADER */
