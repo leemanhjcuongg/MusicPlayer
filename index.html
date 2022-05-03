@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Player</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+      integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="asset/css/style.css" />
+  </head>
+  <body>
+    <div class="player">
+      <!-- Dashboard -->
+      <div class="dashboard">
+        <!-- Header -->
+        <header>
+          <h4>Now playing:</h4>
+          <h2>There's no one at all</h2>
+          <h4 class="author">Author</h4>
+        </header>
+
+        <!-- CD -->
+        <div class="cd">
+          <div class="cd-thumb" style="background-image: url()"></div>
+        </div>
+
+        <!-- Control -->
+        <div class="control">
+          <div class="btn btn-repeat">
+            <i class="fas fa-redo"></i>
+          </div>
+          <div class="btn btn-prev">
+            <i class="fas fa-step-backward"></i>
+          </div>
+          <div class="btn btn-toggle-play">
+            <i class="fas fa-pause icon-pause"></i>
+            <i class="fas fa-play icon-play"></i>
+          </div>
+          <div class="btn btn-next">
+            <i class="fas fa-step-forward"></i>
+          </div>
+          <div class="btn btn-random">
+            <i class="fas fa-random"></i>
+          </div>
+        </div>
+
+        <input
+          id="progress"
+          class="progress"
+          type="range"
+          value="0"
+          step="1"
+          min="0"
+          max="100"
+        />
+
+        <audio id="audio" src=""></audio>
+      </div>
+
+      <!-- Playlist -->
+      <div class="playlist">
+        <div class="song">
+          <div
+            class="thumb"
+            style="
+              background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg');
+            "
+          ></div>
+          <div class="body">
+            <h3 class="title">Music name</h3>
+            <p class="author">Singer</p>
+          </div>
+          <div class="option">
+            <i class="fas fa-ellipsis-h"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design from: https://static.collectui.com/shots/3671744/musicloud-revolutionary-app-for-music-streaming-large -->
+    <script>
+      const $ = document.querySelector.bind(document);
+      const $$ = document.querySelectorAll.bind(document);
+
+      const player = $(".player");
+      const cd = $(".cd");
+
+      const header = $("header h2");
+      const cdThumbnails = $(".cd-thumb");
+      const author = $("header h4.author");
+      const audio = $("#audio");
+
+      const btnPlay = $(".btn-toggle-play");
+
+      const app = {
+        currentIndex: 0,
+        isPlaying: false,
+        song: [
+          {
+            name: "Cuối tuần",
+            singer: "Nguyên Hà, Minh Min - LMC cover",
+            path: "asset/music/cuoi_tuan.mp3",
+            img: "asset/img/img1.jpg",
+          },
+          {
+            name: "Yếu đuối",
+            singer: "Hoàng Dũng - LMC cover",
+            path: "asset/music/yeu_duoi.mp3",
+            img: "asset/img/img2.jpg",
+          },
+          {
+            name: "Bước qua nhau",
+            singer: "Vũ. - LMC cover",
+            path: "asset/music/buoc_qua_nhau.mp3",
+            img: "asset/img/img3.jpg",
+          },
+          {
+            name: "Nàng thơ",
+            singer: "Hoàng Dũng - LMC cover",
+            path: "asset/music/nang_tho.mp3",
+            img: "asset/img/img4.jpg",
+          },
+          {
+            name: "Lấy chồng sớm làm gì",
+            singer: "HuyR, Tuấn Cry - LMC cover",
+            path: "asset/music/lay_chong_som_lam_gi.mp3",
+            img: "asset/img/img1.jpg",
+          },
+          {
+            name: "Last Christmas",
+            singer: "Wham - LMC cover",
+            path: "asset/music/last_christmas.mp3",
+            img: "asset/img/img2.jpg",
+          },
+        ],
+
+        render: function () {
+          const htmls = this.song.map((song) => {
+            return `
+                        <div class="song">
+                        <div class="thumb" style="background-image: url('${song.img}')">
+                        </div>
+                        <div class="body">
+                            <h3 class="title">${song.name}</h3>
+                            <p class="author">${song.singer}</p>
+                        </div>
+                        <div class="option">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                        </div>
+                  `;
+          });
+          $(".playlist").innerHTML = htmls.join("");
+        },
+        defineProperties: function () {
+          Object.defineProperty(this, "currentSong", {
+            //định nghĩa 1 thuộc tính currentSong property
+            get: function () {
+              return this.song[this.currentIndex]; //lấy song hiện tại ở vị trí 0 vì currentIndex property khởi tạo = 0
+            },
+          });
+        },
+        handleEvent: function () {
+          const _this = this
+          //xử lý khi cuộn
+          const cdWidth = cd.offsetWidth;
+          document.onscroll = function () {
+            const scroll = window.scrollY || document.documentElement.scrollTop;
+
+            const newCdWidth = cdWidth - scroll;
+
+            cd.style.width = newCdWidth > 0 ? newCdWidth + "px" : 0;
+            cd.style.opacity = newCdWidth / cdWidth;
+            // console.log(dashboard)
+          };
+          //xử lý khi play
+          // btnPlay.addEventListener("click", function(){
+          //   console.log(123)
+          //   audio.play()
+          //   player.classList.add('playing')
+          // }
+          // )
+          btnPlay.onclick = function () {
+            if (_this.isPlaying) {
+              _this.isPlaying = false;
+              audio.pause();
+              player.classList.remove("playing");
+            } else {
+              _this.isPlaying = true;
+              audio.play();
+              player.classList.add("playing");
+            }
+          };
+        },
+        loadCurrentSong: function () {
+          header.textContent = this.currentSong.name;
+          author.textContent = this.currentSong.singer;
+          cdThumbnails.style.backgroundImage =
+            "url(" + this.currentSong.img + ")";
+          audio.src = this.currentSong.path;
+
+          // console.log(header,author,cdThumbnails,audio)
+        },
+        start: function () {
+          //Định nghĩa thuộc tính cho Object
+          this.defineProperties();
+          // Lắng nghe sự kiện
+          this.handleEvent();
+          //load thông tin bài hát
+          this.loadCurrentSong();
+          //Render playlist lên UI
+          this.render();
+        },
+      };
+      app.start();
+    </script>
+  </body>
+</html>
