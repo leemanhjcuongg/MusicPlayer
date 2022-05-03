@@ -50,6 +50,7 @@ html {
 header {
   text-align: center;
   margin-bottom: 10px;
+  margin-top: 26px;
 }
 
 header h4 {
@@ -84,23 +85,24 @@ header h2 {
   align-items: center;
   justify-content: space-around;
   padding: 18px 0 8px 0;
-  transition: 0.2s all;
 }
 
 .control .btn {
   color: #666;
-  padding: 18px;
+  padding: 10px;
   font-size: 18px;
 }
 
 .control .btn.active {
-  color: var(--primary-color);
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 10px;
 }
 
 .control .btn-toggle-play {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
+  border-radius: 10px;
   font-size: 24px;
   color: #fff;
   display: flex;
@@ -120,20 +122,23 @@ header h2 {
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
 }
+.progress:hover {
+  cursor: pointer;
+}
 
 .progress::-webkit-slider-thumb {
   -webkit-appearance: none;
-  border-radius: 5px;
+  border-radius: 4px;
   appearance: none;
-  width: 12px;
-  height: 6px;
+  width: 10px;
+  height: 26px;
   background-color: var(--primary-color);
   cursor: pointer;
 }
 
 /* PLAYLIST */
 .playlist {
-  margin-top: 408px;
+  margin-top: 444px;
   padding: 12px;
 }
 
