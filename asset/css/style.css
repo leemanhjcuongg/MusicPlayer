@@ -96,6 +96,7 @@ header h2 {
   font-size: 18px;
   transition: all 0.3s;
   border-radius: 10px;
+  cursor: pointer;
 }
 .control .btn:active {
   background-color: var(--secondary-color);

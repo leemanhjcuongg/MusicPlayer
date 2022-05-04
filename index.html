@@ -93,6 +93,8 @@
       const $ = document.querySelector.bind(document);
       const $$ = document.querySelectorAll.bind(document);
 
+      const PLAYER_STORAGE_KEY = "MUSIC_PLAYER";
+
       const player = $(".player");
       const cd = $(".cd");
 
@@ -107,12 +109,21 @@
       const btnPrevious = $(".btn-prev");
       const btnRandom = $(".btn-random");
       const btnRepeat = $(".btn-repeat");
+      const playlist = $(".playlist");
 
       const app = {
         currentIndex: 0,
         isPlaying: false,
         isRandom: false,
         isRepeat: false,
+        settings: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+        keysetting: function (key, value) {
+          this.settings[key] = value;
+          localStorage.setItem(
+            PLAYER_STORAGE_KEY,
+            JSON.stringify(this.settings)
+          );
+        },
         song: [
           {
             name: "Cuối tuần",
@@ -157,7 +168,7 @@
             return `
                         <div class="song ${
                           index === this.currentIndex ? "active" : ""
-                        }">
+                        }" id="${index}">
                         <div class="thumb" style="background-image: url('${
                           song.img
                         }')">
@@ -172,7 +183,7 @@
                         </div>
                   `;
           });
-          $(".playlist").innerHTML = htmls.join("");
+          playlist.innerHTML = htmls.join("");
         },
         defineProperties: function () {
           Object.defineProperty(this, "currentSong", {
@@ -268,6 +279,7 @@
           //random
           btnRandom.onclick = function () {
             _this.isRandom = !_this.isRandom;
+            _this.keysetting("isRandom", _this.isRandom);
             btnRandom.classList.toggle("active", _this.isRandom);
           };
           //xử lý khi hết bài
@@ -281,7 +293,23 @@
           //xử lý lặp lại 1 bài
           btnRepeat.onclick = function () {
             _this.isRepeat = !_this.isRepeat;
+            _this.keysetting("isRepeat", _this.isRepeat);
             btnRepeat.classList.toggle("active", _this.isRepeat);
+          };
+          //xử lý onclick item properies dựa vào thuộc tính cha playlist
+          playlist.onclick = function (e) {
+            const songItem = e.target.closest(".song:not(.active)");
+            //xử lý khi click bài hát
+            if (songItem || e.target.closest(".option")) {
+              //tìm kiếm thuộc tính con nếu k có sẽ tìm thuộc tính cha của class 'song', trừ class đang active
+              if (songItem) {
+                // console.log(songItem.getAttribute('id'))
+                _this.currentIndex = Number(songItem.getAttribute("id"));
+                _this.loadCurrentSong();
+                _this.render();
+                audio.play();
+              }
+            }
           };
         },
         nextSong: function () {
@@ -297,6 +325,10 @@
             this.currentIndex = this.song.length - 1;
           }
           this.loadCurrentSong();
+        },
+        loadSettings: function () {
+          this.isRandom = this.settings.isRandom;
+          this.isRepeat = this.settings.isRepeat;
         },
         randomSong: function () {
           oldIndex = this.currentIndex;
@@ -324,6 +356,8 @@
           audio.src = this.currentSong.path;
         },
         start: function () {
+          //Gán cấu hình setting
+          this.loadSettings();
           //Định nghĩa thuộc tính cho Object
           this.defineProperties();
           // Lắng nghe sự kiện
@@ -332,6 +366,10 @@
           this.loadCurrentSong();
           //Render playlist lên UI
           this.render();
+
+          //hiển thị trạng thái từ localStorage
+          btnRandom.classList.toggle("active", this.isRandom);
+          btnRepeat.classList.toggle("active", this.isRepeat);
         },
       };
       app.start();
