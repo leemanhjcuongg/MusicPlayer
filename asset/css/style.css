@@ -1,5 +1,6 @@
 :root {
   --primary-color: #709f6e;
+  --secondary-color: #709f6eac;
   --text-color: #333;
 }
 
@@ -7,6 +8,7 @@
   padding: 0;
   margin: 0;
   box-sizing: inherit;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -50,7 +52,6 @@ html {
 /* HEADER */
 header {
   text-align: center;
-  margin-bottom: 10px;
   margin-top: 26px;
 }
 
@@ -86,12 +87,18 @@ header h2 {
   align-items: center;
   justify-content: space-around;
   padding: 18px 0 8px 0;
+  transition: all 0.3s;
 }
 
 .control .btn {
   color: #666;
   padding: 10px;
   font-size: 18px;
+  transition: all 0.3s;
+  border-radius: 10px;
+}
+.control .btn:active {
+  background-color: var(--secondary-color);
 }
 
 .control .btn.active {
@@ -103,7 +110,7 @@ header h2 {
 .control .btn-toggle-play {
   width: 56px;
   height: 56px;
-  border-radius: 10px;
+
   font-size: 24px;
   color: #fff;
   display: flex;
@@ -117,14 +124,17 @@ header h2 {
   -webkit-appearance: none;
   border-radius: 5px;
   height: 10px;
+  margin-top: 10px;
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
+  transition: all 0.3s;
 }
 .progress:hover {
   cursor: pointer;
+  height: 18px;
 }
 
 .progress::-webkit-slider-thumb {
@@ -152,9 +162,12 @@ header h2 {
   border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
+.song:hover {
+  cursor: pointer;
+}
 
 .song.active {
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
 }
 
 .song:active {

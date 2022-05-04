@@ -105,10 +105,14 @@
       const progress = $("#progress");
       const btnNext = $(".btn-next");
       const btnPrevious = $(".btn-prev");
+      const btnRandom = $(".btn-random");
+      const btnRepeat = $(".btn-repeat");
 
       const app = {
         currentIndex: 0,
         isPlaying: false,
+        isRandom: false,
+        isRepeat: false,
         song: [
           {
             name: "Cuối tuần",
@@ -149,10 +153,14 @@
         ],
 
         render: function () {
-          const htmls = this.song.map((song) => {
+          const htmls = this.song.map((song, index) => {
             return `
-                        <div class="song">
-                        <div class="thumb" style="background-image: url('${song.img}')">
+                        <div class="song ${
+                          index === this.currentIndex ? "active" : ""
+                        }">
+                        <div class="thumb" style="background-image: url('${
+                          song.img
+                        }')">
                         </div>
                         <div class="body">
                             <h3 class="title">${song.name}</h3>
@@ -237,13 +245,43 @@
           };
           //next
           btnNext.onclick = function () {
-            _this.nextSong();
+            if (_this.isRandom) {
+              _this.randomSong();
+            } else {
+              _this.nextSong();
+            }
             audio.play();
+            _this.render();
+            // _this.scrollToActiveSong();
           };
           //prev
           btnPrevious.onclick = function () {
-            _this.prevSong();
+            if (_this.isRandom) {
+              _this.randomSong();
+            } else {
+              _this.prevSong();
+            }
             audio.play();
+            _this.render();
+            // _this.scrollToActiveSong();
+          };
+          //random
+          btnRandom.onclick = function () {
+            _this.isRandom = !_this.isRandom;
+            btnRandom.classList.toggle("active", _this.isRandom);
+          };
+          //xử lý khi hết bài
+          audio.onended = function () {
+            if (_this.isRepeat) {
+              audio.play();
+            } else {
+              btnNext.click();
+            }
+          };
+          //xử lý lặp lại 1 bài
+          btnRepeat.onclick = function () {
+            _this.isRepeat = !_this.isRepeat;
+            btnRepeat.classList.toggle("active", _this.isRepeat);
           };
         },
         nextSong: function () {
@@ -260,6 +298,24 @@
           }
           this.loadCurrentSong();
         },
+        randomSong: function () {
+          oldIndex = this.currentIndex;
+          newIndex = this.currentIndex;
+          do {
+            oldIndex = newIndex;
+            newIndex = Math.floor(Math.random() * this.song.length);
+          } while (newIndex === this.currentIndex || oldIndex === newIndex);
+          this.currentIndex = newIndex;
+          this.loadCurrentSong();
+        },
+        // scrollToActiveSong: function () {
+        //   setTimeout(function () {
+        //     $(".song.active").scrollIntoView({
+        //       behavior: "smooth",
+        //       block: "center", //kéo item ra giữa màn
+        //     });
+        //   }, 300);
+        // },
         loadCurrentSong: function () {
           header.textContent = this.currentSong.name;
           author.textContent = this.currentSong.singer;
