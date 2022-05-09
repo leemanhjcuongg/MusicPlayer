@@ -1,5 +1,6 @@
 # LMCMusicPlayer
-Simple Music Player Offline
+Simple Music Player Offline for Mobile
+
 All songs I sang inside 😶‍🌫️
 
 Thank for StarMaker!
