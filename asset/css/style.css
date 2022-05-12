@@ -38,6 +38,29 @@ html {
   display: none;
 }
 
+.volume_set {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.fa-solid.fa-volume-low {
+
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+
+.volume {
+  margin-bottom: 10px;
+}
+
+.volume:hover {
+  cursor: pointer;
+}
+
 .dashboard {
   padding: 16px 16px 14px;
   background-color: #fff;
@@ -98,6 +121,7 @@ header h2 {
   border-radius: 10px;
   cursor: pointer;
 }
+
 .control .btn:active {
   background-color: var(--secondary-color);
 }
@@ -120,7 +144,8 @@ header h2 {
   background-color: var(--primary-color);
 }
 
-.progress {
+.progress,
+.volume {
   width: 100%;
   -webkit-appearance: none;
   border-radius: 5px;
@@ -133,12 +158,19 @@ header h2 {
   transition: opacity 0.2s;
   transition: all 0.3s;
 }
+
+.volume {
+  width: 26%;
+  align-items: center;
+}
+
 .progress:hover {
   cursor: pointer;
   height: 18px;
 }
 
-.progress::-webkit-slider-thumb {
+.progress::-webkit-slider-thumb,
+.volume::-webkit-slider-thumb {
   -webkit-appearance: none;
   border-radius: 4px;
   appearance: none;
@@ -150,7 +182,7 @@ header h2 {
 
 /* PLAYLIST */
 .playlist {
-  margin-top: 480px;
+  margin-top: 486px;
   padding: 12px;
 }
 
@@ -163,6 +195,7 @@ header h2 {
   border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
+
 .song:hover {
   cursor: pointer;
 }

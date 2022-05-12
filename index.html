@@ -5,13 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music Player</title>
-
-    <link
+    <script
+      src="https://kit.fontawesome.com/5f9729c3be.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
       integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
       crossorigin="anonymous"
-    />
+    /> -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
@@ -23,6 +26,18 @@
     <div class="player">
       <!-- Dashboard -->
       <div class="dashboard">
+        <div class="volume_set">
+          <i class="fa-solid fa-volume-low"></i>
+          <input
+            id="volume"
+            class="volume"
+            type="range"
+            value="0.26"
+            step="0.05"
+            min="0"
+            max="1"
+          />
+        </div>
         <!-- CD -->
         <div class="cd">
           <div class="cd-thumb" style="background-image: url()"></div>
@@ -110,6 +125,7 @@
       const btnRandom = $(".btn-random");
       const btnRepeat = $(".btn-repeat");
       const playlist = $(".playlist");
+      const volume = $(".volume");
 
       const app = {
         currentIndex: 0,
@@ -125,6 +141,12 @@
           );
         },
         song: [
+          {
+            name: "Bước qua nhau",
+            singer: "Vũ. - LMC cover",
+            path: "asset/music/buoc_qua_nhau.mp3",
+            img: "asset/img/img3.jpg",
+          },
           {
             name: "Từ đó (Mắt Biếc Original Sound Track)",
             singer:
@@ -143,12 +165,6 @@
             singer: "Hoàng Dũng - LMC cover",
             path: "asset/music/yeu_duoi.mp3",
             img: "asset/img/img2.jpg",
-          },
-          {
-            name: "Bước qua nhau",
-            singer: "Vũ. - LMC cover",
-            path: "asset/music/buoc_qua_nhau.mp3",
-            img: "asset/img/img3.jpg",
           },
           {
             name: "Nàng thơ",
@@ -263,6 +279,7 @@
             _this.isPlaying = true;
             player.classList.add("playing");
             cdAnimate.play();
+            audio.volume = volume.value;
           };
           audio.onpause = function () {
             _this.isPlaying = false;
@@ -284,6 +301,10 @@
             const seekTime = (audio.duration / 100) * e.target.value;
             audio.currentTime = seekTime;
             audio.play();
+          };
+          //xử lý âm lượng
+          volume.onchange = function (e) {
+            audio.volume = e.target.value;
           };
           //next
           btnNext.onclick = function () {
