@@ -1,7 +1,7 @@
 # LMCMusicPlayer
 Simple Music Player Offline for Mobile
 
-All songs I sang inside 😶‍🌫️
+All songs I've sung inside 😶‍🌫️
 
 Thank for StarMaker!
 
